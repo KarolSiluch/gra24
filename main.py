@@ -1,5 +1,5 @@
 import pygame
-from game.events_handlers.keyboard_handler import GameKeyboard
+from events_handlers.keyboard_handler import GameKeyboard
 # from game.events_handlers.handler import EventsHandler
 from game.gameplay import Gameplay
 
@@ -17,6 +17,8 @@ class Game:
             for event in self._gameplay.update_handler():
                 if event.type == pygame.QUIT:
                     self._running = False
+
+            self._gameplay.update_states()
 
 
 if __name__ == '__main__':

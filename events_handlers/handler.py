@@ -8,7 +8,6 @@ class EventsHandler(ABC):
     def __init__(self, *events: list[str]):
         super().__init__()
         self._events: dict[str, bool] = {key: False for key in events}
-        self._events['quit'] = False
 
     def get(cls, event: str) -> bool:
         return cls._events.get(event, False)

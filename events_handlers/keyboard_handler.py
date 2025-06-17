@@ -1,4 +1,4 @@
-import game.events_handlers.handler as EventHandlers
+import events_handlers.handler as EventHandlers
 import pygame
 
 

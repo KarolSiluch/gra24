@@ -1,5 +1,6 @@
-from game.events_handlers.handler import GameHandler
+from events_handlers.handler import GameHandler
 import pygame
+import game.game_states.game_machine as gm
 
 
 class Gameplay:
@@ -18,3 +19,10 @@ class Gameplay:
 
     def __init__(self, handler: GameHandler):
         self.set_handler(handler)
+        self._game_machine = gm.GameMachine(self)
+
+    def update_states(self):
+        self._game_machine.change_state()
+        self._game_machine.update()
+
+    def update(self): ...
