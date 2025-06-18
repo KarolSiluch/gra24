@@ -9,9 +9,9 @@ class AABBTree:
 
     def instert(self, tile: Tile) -> None:
         if self._head is None:
-            self._head = AABBLeaf(None, tile)
+            self._head = AABBLeaf(tile)
         elif self._head.leaf or not self._head.rect.contains(tile.rect):
-            self._head = AABBContainer(None, self._head, AABBLeaf(None, tile))
+            self._head = AABBContainer(None, self._head, AABBLeaf(tile))
         else:
             self._head.insert(tile)
 
@@ -44,9 +44,9 @@ class AABBNode(ABC):
 
 
 class AABBLeaf(AABBNode):
-    def __init__(self, parent, tile):
+    def __init__(self, tile):
         self._tile: Tile = tile
-        super().__init__(True, parent, self.get_rect())
+        super().__init__(True, None, self.get_rect())
 
     def get_rect(self) -> pygame.FRect:
         return self._tile.rect
@@ -84,13 +84,9 @@ class AABBContainer(AABBNode):
             rect1 = self.get_nodes_rect(self._node1, tile)
             rect2 = self.get_nodes_rect(self._node2, tile)
             if self.area(rect1) < self.area(rect2):
-                self._node1 = AABBContainer(self._node1._parent, self._node1, AABBLeaf(None, tile))
-        #     else:
-        #         self._node1.insert(tile)
+                self._node1 = AABBContainer(self._node1._parent, self._node1, AABBLeaf(tile))
             else:
-                self._node2 = AABBContainer(self._node2._parent, self._node2, AABBLeaf(None, tile))
-        #     else:
-        #         self._node2.insert(tile)
+                self._node2 = AABBContainer(self._node2._parent, self._node2, AABBLeaf(tile))
 
     def print(self, display: pygame.Surface) -> None:
         pygame.draw.rect(display, 'red', self._rect, 1)
