@@ -15,6 +15,12 @@ class AABBTree:
         else:
             self._head.insert(tile)
 
+    def AABBcollision(self, rect: pygame.FRect) -> list[Tile]:
+        result = []
+        if self._head is not None:
+            self._head.AABBcollision(rect, result, 0)
+        return result
+
     def print(self, display: pygame.Surface):
         self._head.print(display)
 
@@ -40,6 +46,9 @@ class AABBNode(ABC):
     def get_rect(self) -> pygame.FRect: ...
 
     @abstractmethod
+    def AABBcollision(self, rect: pygame.FRect, result: list) -> None: ...
+
+    @abstractmethod
     def print(self, display: pygame.Surface) -> None: ...
 
 
@@ -50,6 +59,11 @@ class AABBLeaf(AABBNode):
 
     def get_rect(self) -> pygame.FRect:
         return self._tile.rect
+
+    def AABBcollision(self, rect: pygame.FRect, result: list, id) -> None:
+        print(id)
+        if self.rect.colliderect(rect):
+            result.append(self._tile)
 
     def print(self, display: pygame.Surface) -> None:
         pygame.draw.rect(display, 'blue', self._rect, 2)
@@ -62,7 +76,6 @@ class AABBContainer(AABBNode):
         self._node2: AABBLeaf | AABBContainer = node2
         self._node2.set_parent(self)
         super().__init__(False, parent, self.get_rect())
-        print(self._parent)
 
     @staticmethod
     def get_nodes_rect(node1: AABBNode | Tile, node2: AABBNode | Tile) -> pygame.FRect:
@@ -87,6 +100,12 @@ class AABBContainer(AABBNode):
                 self._node1 = AABBContainer(self._node1._parent, self._node1, AABBLeaf(tile))
             else:
                 self._node2 = AABBContainer(self._node2._parent, self._node2, AABBLeaf(tile))
+
+    def AABBcollision(self, rect: pygame.FRect, result: list, id) -> None:
+        print(id)
+        if self.rect.colliderect(rect):
+            self._node1.AABBcollision(rect, result, id + 1)
+            self._node2.AABBcollision(rect, result, id + 1)
 
     def print(self, display: pygame.Surface) -> None:
         pygame.draw.rect(display, 'red', self._rect, 1)
