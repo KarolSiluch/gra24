@@ -6,8 +6,7 @@ class GameState(State):
         super().__init__()
         self._game = game
 
-    def update(self):
-        self._game.update()
+    def update(self): ...
 
     def enter(self):
         print('to jest gra')

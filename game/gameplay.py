@@ -1,6 +1,7 @@
 from events_handlers.handler import GameHandler
 import pygame
-import game.game_states.game_machine as gm
+from game.player.player import Player
+import game.camera.game_camera as camera
 
 
 class Gameplay:
@@ -19,10 +20,27 @@ class Gameplay:
 
     def __init__(self, handler: GameHandler):
         self.set_handler(handler)
-        self._game_machine = gm.GameMachine(self)
+        self._player = Player()
+        self._renderer = GameplayRenderer(self)
+        self._camera = camera.Camera()
 
-    def update_states(self):
-        self._game_machine.change_state()
-        self._game_machine.update()
+    @property
+    def renderer(self):
+        return self._renderer
 
-    def update(self): ...
+    @property
+    def camera(self):
+        return self._camera
+
+    def update(self):
+        self._player.move(self._events_handler)
+
+
+class GameplayRenderer:
+    def __init__(self, game: Gameplay):
+        self._game = game
+
+    def render(self, surface: pygame.Surface):
+        surface.fill('purple')
+        player = self._game._player
+        player.renderer.render(surface, player._pos + self._game.camera.get_offset(self._game))

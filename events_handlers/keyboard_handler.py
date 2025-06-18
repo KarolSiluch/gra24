@@ -12,18 +12,18 @@ class GameKeyboard(EventHandlers.GameHandler):
                     self._events['up'] = True
                 if event.key == pygame.K_s:
                     self._events['down'] = True
-                if event.key == pygame.K_w:
+                if event.key == pygame.K_a:
                     self._events['left'] = True
-                if event.key == pygame.K_w:
+                if event.key == pygame.K_d:
                     self._events['right'] = True
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_w:
                     self._events['up'] = False
                 if event.key == pygame.K_s:
                     self._events['down'] = False
-                if event.key == pygame.K_w:
+                if event.key == pygame.K_a:
                     self._events['left'] = False
-                if event.key == pygame.K_w:
+                if event.key == pygame.K_d:
                     self._events['right'] = False
 
     def update(self) -> list[pygame.Event]:
