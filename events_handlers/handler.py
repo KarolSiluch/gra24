@@ -18,4 +18,4 @@ class EventsHandler(ABC):
 
 class GameHandler(EventsHandler):
     def __init__(self):
-        super().__init__('up', 'down', 'left', 'right')
+        super().__init__('up', 'down', 'left', 'right', 'mouse1')

@@ -25,6 +25,10 @@ class GameKeyboard(EventHandlers.GameHandler):
                     self._events['left'] = False
                 if event.key == pygame.K_d:
                     self._events['right'] = False
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                self._events['mouse1'] = True
+            else:
+                self._events['mouse1'] = False
 
     def update(self) -> list[pygame.Event]:
         events = pygame.event.get()

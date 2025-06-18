@@ -8,5 +8,5 @@ class Camera:
 
     def get_offset(self, game) -> pygame.Vector2:
         offset = pygame.Vector2(self._screen_w, self._screen_h)
-        offset -= game._player._pos
+        offset -= game._player.rect.center
         return offset
