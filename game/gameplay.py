@@ -65,6 +65,6 @@ class GameplayRenderer:
         surface.fill('purple')
         self._game._player.renderer.render(surface, self._game._player.rect.topleft)
         tiles: tuple[Tile] = self._game.tiles
+        self._game.AABB_tree.print(surface)
         for tile in tiles:
             tile.renderer.render(surface, tile.rect.topleft)
-        self._game.AABB_tree.print(surface)
