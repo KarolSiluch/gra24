@@ -3,6 +3,9 @@ import pygame
 
 
 class GameKeyboard(EventHandlers.GameHandler):
+    def __init__(self):
+        super().__init__()
+
     def set_events(self, events: list[pygame.Event]) -> None:
         for event in events:
             if event.type == pygame.QUIT:
@@ -25,12 +28,14 @@ class GameKeyboard(EventHandlers.GameHandler):
                     self._events['left'] = False
                 if event.key == pygame.K_d:
                     self._events['right'] = False
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                self._events['mouse1'] = True
-            else:
-                self._events['mouse1'] = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    self._events['mouse1'] = True
 
     def update(self) -> list[pygame.Event]:
         events = pygame.event.get()
         self.set_events(events)
         return events
+
+    def reset_keys(self):
+        self._events['mouse1'] = False

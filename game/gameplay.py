@@ -4,6 +4,7 @@ from game.player.player import Player
 import game.camera.game_camera as camera
 from game.tiles.tile import Tile
 from game.AABBtree.AABBtree import AABBTree
+# from random import randint
 
 
 class Gameplay:
@@ -28,11 +29,8 @@ class Gameplay:
 
         tile_image = pygame.Surface((16, 16))
         tile_image.fill('green')
-        self.tiles = [
-            Tile(tile_image, center=(150, 150)),
-            Tile(tile_image, center=(400, 200)),
-            Tile(tile_image, center=(380, 180)),
-        ]
+        # self.tiles = [Tile(tile_image, center=(randint(20, 500), randint(20, 300))) for _ in range(10)]
+        self.tiles = []
 
         self.AABB_tree = AABBTree()
         for tile in self.tiles:
@@ -49,16 +47,14 @@ class Gameplay:
     def update(self):
         self._player.move(self._events_handler)
 
-        self.AABB_tree.AABBcollision(self._player.rect)
-        # if tiles:
-        #     print(tiles)
-
         if self._events_handler.get('mouse1'):
             tile_image = pygame.Surface((16, 16))
             tile_image.fill('green')
             tile = Tile(tile_image, center=pygame.mouse.get_pos())
             self.tiles.append(tile)
             self.AABB_tree.instert(tile)
+
+        self._events_handler.reset_keys()
 
 
 class GameplayRenderer:
