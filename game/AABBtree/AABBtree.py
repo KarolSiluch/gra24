@@ -123,12 +123,39 @@ class AABBContainer(AABBNode):
         return rect.width * rect.height
 
     def rebalance(self):
-        self._node2, self._node1._node1 = self._node1._node1, self._node2
+        bottom_tree = self._node1._node1
+        mid_tree = self._node1
+
+        # total_area = self.area(self._rect) + self.area(bottom_tree.rect)
+        total_area = self.area(bottom_tree.rect) + self.area(self.get_nodes_rect(mid_tree._node2, self._node2))
+        print(total_area)
+
+        new_area1 = self.area(self.get_nodes_rect(bottom_tree._node1, self._node2))
+        new_area2 = self.area(self.get_nodes_rect(bottom_tree._node2, mid_tree._node2))
+        print(new_area1 + new_area2)
+        if new_area1 + new_area2 < total_area:
+            print('wybrano to na górze')
+            total_area = new_area1 + new_area2
+            mid_tree._node2, bottom_tree._node1 = bottom_tree._node1, mid_tree._node2
+            bottom_tree._node1.set_parent(bottom_tree)
+            mid_tree._node2.set_parent(mid_tree)
+
+        new_area1 = self.area(self.get_nodes_rect(bottom_tree._node1, mid_tree._node2))
+        new_area2 = self.area(self.get_nodes_rect(bottom_tree._node2, self._node2))
+        print(new_area1 + new_area2)
+        if new_area1 + new_area2 < total_area:
+            print('wybrano jednak to na górze')
+            mid_tree._node2, bottom_tree._node2 = bottom_tree._node2, mid_tree._node2
+            bottom_tree._node2.set_parent(bottom_tree)
+            mid_tree._node2.set_parent(mid_tree)
+
+        bottom_tree._rect = bottom_tree.get_rect()
+        self._node2, mid_tree._node1 = mid_tree._node1, self._node2
         self._node2.set_parent(self)
-        self._node1._node1.set_parent(self._node1)
-        self._node1._layer -= 1
+        bottom_tree.set_parent(mid_tree)
+        mid_tree._layer -= 1
         self.update_rect()
-        self._node1.update_rect()
+        mid_tree.update_rect()
         self.set_new_layer()
 
     def set_new_layer(self):
@@ -184,8 +211,6 @@ class AABBContainer(AABBNode):
             self._node2.AABBcollision(rect, result, id + 1)
 
     def print(self, display: pygame.Surface) -> None:
-        print('node1: ', self._node1.layer)
-        print('node2: ', self._node2.layer)
-        pygame.draw.rect(display, (self._layer * 20, self._layer * 20, self._layer * 20), self._rect, 0)
+        pygame.draw.rect(display, (self._layer * 20, self._layer * 20, self._layer * 20), self._rect, 1)
         self._node1.print(display)
         self._node2.print(display)

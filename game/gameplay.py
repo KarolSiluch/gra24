@@ -4,7 +4,7 @@ from game.player.player import Player
 import game.camera.game_camera as camera
 from game.tiles.tile import Tile
 from game.AABBtree.AABBtree import AABBTree
-# from random import randint
+from random import randint
 
 
 class Gameplay:
