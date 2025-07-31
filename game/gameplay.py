@@ -29,8 +29,8 @@ class Gameplay:
 
         tile_image = pygame.Surface((16, 16))
         tile_image.fill('green')
-        # self.tiles = [Tile(tile_image, center=(randint(20, 500), randint(20, 300))) for _ in range(10)]
-        self.tiles = []
+        self.tiles = [Tile(tile_image, center=(randint(20, 500), randint(20, 300))) for _ in range(20)]
+        # self.tiles = []
 
         self.AABB_tree = AABBTree()
         for tile in self.tiles:
