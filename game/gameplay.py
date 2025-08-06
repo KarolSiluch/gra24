@@ -5,6 +5,7 @@ import game.camera.game_camera as camera
 from game.tiles.tile import Tile
 from game.AABBtree.AABBtree import AABBTree
 from random import randint
+from game.player.modules.Position2DModule import RectType
 
 
 class Gameplay:
@@ -23,18 +24,24 @@ class Gameplay:
 
     def __init__(self, handler: GameHandler):
         self.set_handler(handler)
-        self._player = Player()
+
+        self.AABB_tree = AABBTree(RectType.RenderRect)
+        self._player = Player([self.AABB_tree])
         self._renderer = GameplayRenderer(self)
         self._camera = camera.Camera()
 
-        tile_image = pygame.Surface((16, 16))
-        tile_image.fill('green')
-        self.tiles = [Tile(tile_image, center=(randint(20, 500), randint(20, 300))) for _ in range(20)]
-        # self.tiles = []
+        tile_size = 16
+        for _ in range(10):
+            tile_image = pygame.Surface((tile_size, tile_size))
+            tile_image.fill('green')
+            pos = (randint(20, 500), randint(20, 300))
+            Tile([self.AABB_tree], tile_image, topleft=pos)
 
-        self.AABB_tree = AABBTree()
-        for tile in self.tiles:
-            self.AABB_tree.instert(tile)
+        # for i in range(64):
+        #     tile_image = pygame.Surface((tile_size, tile_size))
+        #     tile_image.fill('green')
+        #     pos = (i + i * tile_size, i * tile_size / 2)
+        #     Tile([self.AABB_tree], tile_image, topleft=pos)
 
     @property
     def renderer(self):
@@ -45,14 +52,12 @@ class Gameplay:
         return self._camera
 
     def update(self):
-        self._player.move(self._events_handler)
+        self._player.update(self._events_handler)
 
         if self._events_handler.get('mouse1'):
             tile_image = pygame.Surface((16, 16))
             tile_image.fill('green')
-            tile = Tile(tile_image, center=pygame.mouse.get_pos())
-            self.tiles.append(tile)
-            self.AABB_tree.instert(tile)
+            Tile([self.AABB_tree], tile_image, center=pygame.mouse.get_pos())
 
         self._events_handler.reset_keys()
 
@@ -63,8 +68,8 @@ class GameplayRenderer:
 
     def render(self, surface: pygame.Surface):
         surface.fill('purple')
-        self._game._player.renderer.render(surface, self._game._player.rect.topleft)
-        tiles: tuple[Tile] = self._game.tiles
+        tiles: tuple[Tile] = self._game.camera.get_tiles(self._game.AABB_tree)
         self._game.AABB_tree.print(surface)
         for tile in tiles:
-            tile.renderer.render(surface, tile.rect.topleft)
+            pos = tile.renderer.pos
+            tile.renderer.render(surface, pos)
