@@ -5,7 +5,8 @@ import game.camera.game_camera as camera
 from game.tiles.tile import Tile
 from game.AABBtree.AABBtree import AABBTree
 from random import randint
-from game.player.modules.Position2DModule import RectType
+from game.tiles.modules.Position2DModule import RectType
+from game.map.map import GameMap, GroupType
 
 
 class Gameplay:
@@ -25,8 +26,13 @@ class Gameplay:
     def __init__(self, handler: GameHandler):
         self.set_handler(handler)
 
-        self.AABB_tree = AABBTree(RectType.RenderRect)
-        self._player = Player([self.AABB_tree])
+        self._map = {
+            GroupType.Visible: AABBTree(RectType.RenderRect),
+            GroupType.Obsticles: AABBTree(RectType.Hitbox)
+        }
+        GameMap.init(self._map)
+
+        self._player = Player([GroupType.Visible])
         self._renderer = GameplayRenderer(self)
         self._camera = camera.Camera()
 
@@ -35,13 +41,7 @@ class Gameplay:
             tile_image = pygame.Surface((tile_size, tile_size))
             tile_image.fill('green')
             pos = (randint(20, 500), randint(20, 300))
-            Tile([self.AABB_tree], tile_image, topleft=pos)
-
-        # for i in range(64):
-        #     tile_image = pygame.Surface((tile_size, tile_size))
-        #     tile_image.fill('green')
-        #     pos = (i + i * tile_size, i * tile_size / 2)
-        #     Tile([self.AABB_tree], tile_image, topleft=pos)
+            Tile([GroupType.Visible, GroupType.Obsticles], tile_image, topleft=pos)
 
     @property
     def renderer(self):
@@ -53,12 +53,6 @@ class Gameplay:
 
     def update(self):
         self._player.update(self._events_handler)
-
-        if self._events_handler.get('mouse1'):
-            tile_image = pygame.Surface((16, 16))
-            tile_image.fill('green')
-            Tile([self.AABB_tree], tile_image, center=pygame.mouse.get_pos())
-
         self._events_handler.reset_keys()
 
 
@@ -68,8 +62,9 @@ class GameplayRenderer:
 
     def render(self, surface: pygame.Surface):
         surface.fill('purple')
-        tiles: tuple[Tile] = self._game.camera.get_tiles(self._game.AABB_tree)
-        self._game.AABB_tree.print(surface)
+        visible_tiles = GameMap.get_group(GroupType.Visible)
+        tiles: tuple[Tile] = self._game.camera.get_tiles(visible_tiles)
+        visible_tiles.print(surface)
         for tile in tiles:
             pos = tile.renderer.pos
             tile.renderer.render(surface, pos)

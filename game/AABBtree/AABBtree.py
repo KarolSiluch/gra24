@@ -1,7 +1,8 @@
 import pygame
 from abc import ABC, abstractmethod
-from game.player.modules.Position2DModule import RectType
+from game.tiles.modules.Position2DModule import RectType
 from typing import Protocol
+from game.tiles.modules.basic_modules import Context
 
 
 class AABBModule(Protocol):
@@ -111,7 +112,7 @@ class AABBTreeHead:
 
 class AABBLeaf(AABBNode):
     def __init__(self, head: AABBTreeHead, tile: AABBModule):
-        self._tile = tile
+        self._tile: Context = tile
         rect = tile.get_hitbox(head.rect_type)
         super().__init__(head, True, 0, rect)
 
@@ -301,6 +302,7 @@ class Insertion:
 class AABBTree:
     def __init__(self, rect_type: RectType):
         self._head: AABBTreeHead = AABBTreeHead(rect_type)
+        self._rect_type = rect_type
 
     def insert(self, tile) -> AABBLeaf:
         node = AABBLeaf(self._head, tile)
@@ -308,11 +310,14 @@ class AABBTree:
         self._head.rebalance()
         return node
 
-    def AABBcollision(self, rect: pygame.FRect) -> list:
+    def RectCollision(self, rect: pygame.FRect) -> list[Context]:
         result = []
         if node := self._head.node:
             node.AABBcollision(rect, result, 0)
         return result
+
+    def AABBCollision(self, tile: AABBModule) -> list[Context]:
+        return self.RectCollision(tile.get_hitbox(self._rect_type))
 
     def print(self, display: pygame.Surface):
         self._head.print(display)

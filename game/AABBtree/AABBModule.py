@@ -1,20 +1,21 @@
 from typing import Protocol
 from game.AABBtree.AABBtree import AABBTree
-from game.player.modules.Position2DModule import RectType, Position2D
+from game.tiles.modules.Position2DModule import RectType, Position2D
+from game.tiles.modules.basic_modules import Module, ModuleType
+from game.map.map import GameMap
 
 
 class Context(Protocol):
     _position: Position2D
 
 
-class AABBModule:
-    def start(self, context: Context, groups: list[AABBTree]):
-        self._context = context
-        self._hitbox = context._position.get_rect(RectType.Hitbox)
-        self._g = [group.insert(self) for group in groups]
+class AABBModule(Module):
+    def start(self, groups: list[AABBTree]):
+        self._g = [GameMap.get_group(group).insert(self) for group in groups]
 
     def get_hitbox(self, rect_type: RectType):
-        return self._context._position.get_rect(rect_type)
+        position: Position2D = self._context.get_module(ModuleType.Position)
+        return position.get_rect(rect_type)
 
     def update(self):
         for node in self._g:

@@ -14,4 +14,4 @@ class Camera:
         return offset
 
     def get_tiles(self, visible_tiles: AABBTree):
-        return visible_tiles.AABBcollision(self._rect)
+        return visible_tiles.RectCollision(self._rect)
