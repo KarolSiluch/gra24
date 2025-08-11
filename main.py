@@ -3,6 +3,12 @@ from events_handlers.keyboard_handler import GameKeyboard
 from game.gameplay import Gameplay
 
 
+def Render_Text(screen: pygame.Surface, what: str, color, where):
+    font = pygame.font.Font(None, 30)
+    text = font.render(what, True, pygame.Color(color))
+    screen.blit(text, where)
+
+
 class Game:
     def __init__(self):
         pygame.init()
@@ -17,6 +23,7 @@ class Game:
 
     def render(self):
         self._gameplay.renderer.render(self._display)
+        Render_Text(self._display, str(int(self._clock.get_fps())), (255, 0, 0), (self._display.width - 40, 3))
         pygame.display.update()
 
     def run(self):

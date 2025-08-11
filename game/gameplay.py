@@ -64,7 +64,7 @@ class GameplayRenderer:
         surface.fill('purple')
         visible_tiles = GameMap.get_group(GroupType.Visible)
         tiles: tuple[Tile] = self._game.camera.get_tiles(visible_tiles)
-        visible_tiles.print(surface)
+        # visible_tiles.print(surface)
         for tile in tiles:
             pos = tile.renderer.pos
             tile.renderer.render(surface, pos)
