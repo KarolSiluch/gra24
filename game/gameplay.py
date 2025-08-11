@@ -7,6 +7,7 @@ from game.AABBtree.AABBtree import AABBTree
 from random import randint
 from game.tiles.modules.Position2DModule import RectType
 from game.map.map import GameMap, GroupType
+from game.assets_manager.assets_manager import AssetsManager
 
 
 class Gameplay:
@@ -25,6 +26,7 @@ class Gameplay:
 
     def __init__(self, handler: GameHandler):
         self.set_handler(handler)
+        AssetsManager.init()
 
         self._map = {
             GroupType.Visible: AABBTree(RectType.RenderRect),
