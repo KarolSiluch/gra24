@@ -1,6 +1,7 @@
 import pygame
 from events_handlers.keyboard_handler import GameKeyboard
 from game.gameplay import Gameplay
+import time
 
 
 def Render_Text(screen: pygame.Surface, what: str, color, where):
@@ -20,6 +21,7 @@ class Game:
         self._running = True
         self._gameplay = Gameplay(GameKeyboard())
         self._clock = pygame.time.Clock()
+        self._previous_time = time.time()
 
     def render(self):
         self._gameplay.renderer.render(self._display)
@@ -28,12 +30,14 @@ class Game:
 
     def run(self):
         while self._running:
-            self._clock.tick(60)
+            self._clock.tick(300)
+            dt = time.time() - self._previous_time
+            self._previous_time = time.time()
             for event in self._gameplay.update_handler():
                 if event.type == pygame.QUIT:
                     self._running = False
 
-            self._gameplay.update()
+            self._gameplay.update(dt)
             self.render()
 
 

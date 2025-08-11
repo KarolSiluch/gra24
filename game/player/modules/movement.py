@@ -14,8 +14,8 @@ class MoveModule(Module):
         self._position: Position2D = self._context.get_module(ModuleType.Position)
         self._collisions: CollisionModule = self._context.get_module(ModuleType.Collision)
 
-    def move(self, direction: int, axis: str, set_pos_edge, set_neg_edge) -> None:
-        new_pos = getattr(self._position, axis) + direction * 3
+    def move(self, dt: float, direction: int, axis: str, set_pos_edge, set_neg_edge) -> None:
+        new_pos = getattr(self._position, axis) + direction * 200 * dt
         setattr(self._position, axis, new_pos)
         for tile in self._collisions.get_collision(GroupType.Obsticles):
             position: Position2D = tile.get_module(ModuleType.Position)
@@ -25,15 +25,15 @@ class MoveModule(Module):
             else:
                 set_neg_edge(rect)
 
-    def update(self, events: GameHandler):
+    def update(self, dt: float, events: GameHandler):
         rtype: RectType = RectType.Hitbox
 
         direction = events.get('right') - events.get('left')
         set_pos_edge: Callable[[pygame.FRect], None] = lambda rect: self._position.set_right(rtype, rect.left)
         set_neg_edge: Callable[[pygame.FRect], None] = lambda rect: self._position.set_left(rtype, rect.right)
-        self.move(direction, 'x', set_pos_edge, set_neg_edge)
+        self.move(dt, direction, 'x', set_pos_edge, set_neg_edge)
 
         direction = events.get('down') - events.get('up')
         set_pos_edge: Callable[[pygame.FRect], None] = lambda rect: self._position.set_bottom(rtype, rect.top)
         set_neg_edge: Callable[[pygame.FRect], None] = lambda rect: self._position.set_top(rtype, rect.bottom)
-        self.move(direction, 'y', set_pos_edge, set_neg_edge)
+        self.move(dt, direction, 'y', set_pos_edge, set_neg_edge)

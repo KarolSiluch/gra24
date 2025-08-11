@@ -17,6 +17,6 @@ class Player(Tile):
         self._move = MoveModule(self)
         self._move.start()
 
-    def update(self, events: GameHandler):
-        self._move.update(events)
+    def update(self, dt: float, events: GameHandler):
+        self._move.update(dt, events)
         self.get_module(ModuleType.AABB).update()
