@@ -39,10 +39,8 @@ class Gameplay:
         self._renderer = GameplayRenderer(self)
         self._camera = camera.Camera()
 
-        tile_size = 16
         for _ in range(10):
-            tile_image = pygame.Surface((tile_size, tile_size))
-            tile_image.fill('green')
+            tile_image = AssetsManager.get('tiles')[7]
             pos = (randint(20, 500), randint(20, 300))
             Tile([GroupType.Visible, GroupType.Obsticles], tile_image, topleft=pos)
 
@@ -71,7 +69,7 @@ class GameplayRenderer:
         self._game = game
 
     def render(self, surface: pygame.Surface):
-        surface.fill('purple')
+        surface.fill('#394541')
         visible_tiles = GameMap.get_group(GroupType.Visible)
         tiles: tuple[Tile] = self._game.camera.get_tiles(visible_tiles)
         # visible_tiles.print(surface)

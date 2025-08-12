@@ -6,7 +6,11 @@ class AssetsManager:
     @classmethod
     def init(cls):
         cls._assets = {
-            'player': Animation(cls.import_cut_graphics((4, 1), 'assets/run.png'), animation_speed=9)
+            'player': {
+                'run': Animation(cls.import_cut_graphics((4, 1), 'assets/run.png'), animation_speed=9),
+                'idle': Animation(cls.import_cut_graphics((5, 1), 'assets/idle.png'), animation_speed=7)
+            },
+            'tiles': cls.import_cut_graphics((3, 4), 'assets/walls.png')
         }
 
     @classmethod
