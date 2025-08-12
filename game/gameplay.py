@@ -8,6 +8,7 @@ from random import randint
 from game.tiles.modules.Position2DModule import RectType
 from game.map.map import GameMap, GroupType
 from game.assets_manager.assets_manager import AssetsManager
+from game.tiles.modules.basic_modules import ModuleType
 
 
 class Gameplay:
@@ -74,6 +75,6 @@ class GameplayRenderer:
         visible_tiles = GameMap.get_group(GroupType.Visible)
         tiles: tuple[Tile] = self._game.camera.get_tiles(visible_tiles)
         # visible_tiles.print(surface)
-        for tile in tiles:
+        for tile in sorted(tiles, key=lambda tile: tile.get_module(ModuleType.Position).y):
             pos = tile.renderer.pos
             tile.renderer.render(surface, pos)

@@ -1,11 +1,12 @@
 import pygame
+from game.assets_manager.animation import Animation
 
 
 class AssetsManager:
     @classmethod
     def init(cls):
         cls._assets = {
-            'player': cls.import_image('assets/Accelerator.png')
+            'player': Animation(cls.import_cut_graphics((4, 1), 'assets/run.png'), animation_speed=9)
         }
 
     @classmethod
@@ -13,7 +14,21 @@ class AssetsManager:
         return cls._assets.get(path)
 
     @staticmethod
-    def import_image(path: str) -> pygame.Surface:
+    def load_image(path: str) -> pygame.Surface:
         image = pygame.image.load(path).convert()
         image.set_colorkey((255, 0, 255))
         return image
+
+    @classmethod
+    def import_cut_graphics(cls, image_grid: tuple[int], path):
+        combined_image = cls.load_image(path)
+        image_width = int(combined_image.get_width() / image_grid[0])
+        image_height = int(combined_image.get_height() / image_grid[1])
+        result = []
+        for y in range(image_grid[1]):
+            for x in range(image_grid[0]):
+                image = pygame.Surface((image_width, image_height), pygame.SRCALPHA)
+                offset = (-x * image_width, -y * image_height)
+                image.blit(combined_image, offset)
+                result.append(image)
+        return result

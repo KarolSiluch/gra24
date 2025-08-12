@@ -30,7 +30,7 @@ class Game:
 
     def run(self):
         while self._running:
-            self._clock.tick(300)
+            self._clock.tick(500)
             dt = time.time() - self._previous_time
             self._previous_time = time.time()
             for event in self._gameplay.update_handler():
