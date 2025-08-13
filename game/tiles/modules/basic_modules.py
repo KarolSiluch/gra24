@@ -8,7 +8,8 @@ class ModuleType(Enum):
     Renderer = 1,
     AABB = 2,
     Movement = 3,
-    Collision = 4
+    Collision = 4,
+    Weapon = 5
 
 
 class Context(Protocol):

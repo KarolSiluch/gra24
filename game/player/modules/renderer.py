@@ -2,6 +2,8 @@ import pygame
 from game.tiles.modules.basic_modules import Module, ModuleType, Context
 from game.assets_manager.animation import Animation
 from game.tiles.modules.Position2DModule import Position2D, RectType
+from game.player.weapon.weapon import WeaponRenderer
+from game.player.modules.weapon_module import WeaponModule
 
 
 class PlayerAnimation:
@@ -36,6 +38,9 @@ class PlayerRenderer(Module):
         self._animations = self._create_animations(animations)
         self._current_animation = self._animations['idle']
 
+        weapon_module: WeaponModule = self._context.get_module(ModuleType.Weapon)
+        self._weapon_renderer: WeaponRenderer = weapon_module.weapon.get_module(ModuleType.Renderer)
+
     def _create_animations(self, animations):
         animation_classes = {
             'idle': PlayerAnimation,
@@ -51,10 +56,17 @@ class PlayerRenderer(Module):
         return self._rect.topleft
 
     def img(self, surface: pygame.Surface) -> pygame.Surface:
+        # clear
         surface.fill((0, 0, 0, 0))
+        # shadow
         pygame.draw.ellipse(surface, (20, 20, 20), self._shadow)
+        # player
         image = self._current_animation.img()
         surface.blit(image, self._current_animation.rect)
+        # weapon
+        rotation_point = (self._surface.width // 2, self._surface.height // 2 + 4)
+        self._weapon_renderer.render(surface, rotation_point)
+
         return surface
 
     def render(self, surface: pygame.Surface, pos: pygame.Vector2):

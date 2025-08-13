@@ -8,6 +8,8 @@ from game.assets_manager.assets_manager import AssetsManager
 from game.AABBtree.AABBModule import AABBModule
 from game.tiles.modules.Position2DModule import Position2D, RectType
 from game.player.modules.renderer import PlayerRenderer
+from game.player.modules.weapon_module import WeaponModule
+from game.player.weapon.weapon import Weapon
 
 
 class Player(BaseTile):
@@ -22,6 +24,8 @@ class Player(BaseTile):
         self.new_module(ModuleType.Collision, CollisionModule)
 
         self.new_module(ModuleType.Movement, MoveModule)
+
+        self.new_module(ModuleType.Weapon, WeaponModule, Weapon(self))
 
         animation = AssetsManager.get('player')
         self.new_module(ModuleType.Renderer, PlayerRenderer, animation)

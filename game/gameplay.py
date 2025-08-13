@@ -44,13 +44,6 @@ class Gameplay:
             pos = (randint(20, 500), randint(20, 300))
             Tile([GroupType.Visible, GroupType.Obsticles], tile_image, topleft=pos)
 
-        # tile_size = 3
-        # for i in range(200):
-        #     tile_image = pygame.Surface((tile_size, tile_size))
-        #     tile_image.fill('green')
-        #     pos = (i * tile_size, 0)
-        #     Tile([GroupType.Visible, GroupType.Obsticles], tile_image, topleft=pos)
-
     @property
     def renderer(self):
         return self._renderer
