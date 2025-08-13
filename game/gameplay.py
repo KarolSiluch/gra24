@@ -40,7 +40,7 @@ class Gameplay:
         self._camera = camera.Camera()
 
         for _ in range(10):
-            tile_image = AssetsManager.get('tiles')[7]
+            tile_image = AssetsManager.get('tiles')[8]
             pos = (randint(20, 500), randint(20, 300))
             Tile([GroupType.Visible, GroupType.Obsticles], tile_image, topleft=pos)
 
@@ -72,7 +72,7 @@ class GameplayRenderer:
         surface.fill('#394541')
         visible_tiles = GameMap.get_group(GroupType.Visible)
         tiles: tuple[Tile] = self._game.camera.get_tiles(visible_tiles)
-        # visible_tiles.print(surface)
+        visible_tiles.print(surface)
         for tile in sorted(tiles, key=lambda tile: tile.get_module(ModuleType.Position).y):
             pos = tile.renderer.pos
             tile.renderer.render(surface, pos)

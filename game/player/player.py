@@ -15,7 +15,7 @@ class Player(BaseTile):
         super().__init__()
         position: Position2D = self.new_module(ModuleType.Position, Position2D, pygame.Vector2(100, 100))
         position.new_rect(RectType.Hitbox, (12, 5), 'center')
-        position.new_rect(RectType.RenderRect, (0, 0), 'center')
+        position.new_rect(RectType.RenderRect, (30, 35), 'center')
 
         self.new_module(ModuleType.AABB, AABBModule, groups)
 

@@ -5,7 +5,7 @@ from game.tiles.modules.basic_modules import Module
 
 class RectType(Enum):
     RenderRect = 0,
-    Hitbox = 1
+    Hitbox = 1,
 
 
 class Position2D(Module):
@@ -18,8 +18,11 @@ class Position2D(Module):
         }
 
     def new_rect(self, rect_type: RectType, size, offset: str, custom_offset=(0, 0)):
-        direct_pos = self._offset.get(offset)(size) + custom_offset
-        self._rects[rect_type] = pygame.FRect(direct_pos, size)
+        # direct_pos = self._offset.get(offset)(size) + custom_offset
+        # self._rects[rect_type] = pygame.FRect(direct_pos, size)
+        rect = pygame.Surface(size).get_frect(**{offset: self._pos})
+        rect.move_ip(custom_offset)
+        self._rects[rect_type] = rect
 
     @property
     def x(self):
