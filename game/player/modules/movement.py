@@ -2,20 +2,26 @@ import pygame
 from game.tiles.modules.basic_modules import Module, ModuleType
 from game.tiles.modules.Position2DModule import Position2D, RectType
 from typing import Callable
-from events_handlers.handler import GameHandler
+# from events_handlers.handler import GameHandler
 from game.map.map import GroupType
 from game.player.modules.collision import CollisionModule
 
 
 class MoveModule(Module):
-    __slots__ = ('_position', '_collisions')
+    __slots__ = ('_position', '_collisions', '_velocity', '_direction')
 
     def start(self):
         self._position: Position2D = self._context.get_module(ModuleType.Position)
         self._collisions: CollisionModule = self._context.get_module(ModuleType.Collision)
+        self._velocity = 200
+        self._direction = pygame.Vector2(0, 0)
 
-    def move(self, dt: float, direction: float, axis: str, set_pos_edge, set_neg_edge) -> None:
-        new_pos = getattr(self._position, axis) + direction * 200 * dt
+    @property
+    def direction(self):
+        return self._direction
+
+    def move_axis(self, dt: float, direction: float, axis: str, set_pos_edge, set_neg_edge) -> None:
+        new_pos = getattr(self._position, axis) + direction * self._velocity * dt
         setattr(self._position, axis, new_pos)
         for tile in self._collisions.get_collision(GroupType.Obsticles):
             position: Position2D = tile.get_module(ModuleType.Position)
@@ -25,16 +31,15 @@ class MoveModule(Module):
             else:
                 set_neg_edge(rect)
 
-    def update(self, dt: float, events: GameHandler):
+    def move(self, dt: float, direction: pygame.Vector2):
         rtype: RectType = RectType.Hitbox
 
-        direction = pygame.Vector2(events.get('right') - events.get('left'), events.get('down') - events.get('up'))
-        direction and direction.normalize_ip()
+        self._direction = direction
 
         set_pos_edge: Callable[[pygame.FRect], None] = lambda rect: self._position.set_right(rtype, rect.left)
         set_neg_edge: Callable[[pygame.FRect], None] = lambda rect: self._position.set_left(rtype, rect.right)
-        self.move(dt, direction.x, 'x', set_pos_edge, set_neg_edge)
+        self.move_axis(dt, direction.x, 'x', set_pos_edge, set_neg_edge)
 
         set_pos_edge: Callable[[pygame.FRect], None] = lambda rect: self._position.set_bottom(rtype, rect.top)
         set_neg_edge: Callable[[pygame.FRect], None] = lambda rect: self._position.set_top(rtype, rect.bottom)
-        self.move(dt, direction.y, 'y', set_pos_edge, set_neg_edge)
+        self.move_axis(dt, direction.y, 'y', set_pos_edge, set_neg_edge)

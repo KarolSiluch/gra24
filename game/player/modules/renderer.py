@@ -18,6 +18,9 @@ class PlayerAnimation:
     def rect(self):
         return self._rect
 
+    def reset(self):
+        self._animation.reset()
+
     def update(self, dt, direction):
         self._animation.update(dt, direction)
 
@@ -33,10 +36,12 @@ class PlayerRenderer(Module):
         self._rect = position.get_rect(RectType.RenderRect)
         self._surface = pygame.Surface(self._rect.size, flags=pygame.SRCALPHA)
 
-        self._shadow = pygame.Surface((15, 7)).get_rect(center=(self._rect.width // 2, self._rect.height - 6))
+        self._shadow_image = pygame.Surface((15, 7), flags=pygame.SRCALPHA)
+        pygame.draw.ellipse(self._shadow_image, (20, 20, 20), pygame.Rect((0, 0), self._shadow_image.size))
+        self._shadow_rect = self._shadow_image.get_rect(center=(self._rect.width // 2, self._rect.height - 6))
 
         self._animations = self._create_animations(animations)
-        self._current_animation = self._animations['idle']
+        self._current_animation = self._animations['run']
 
         weapon_module: WeaponModule = self._context.get_module(ModuleType.Weapon)
         self._weapon_renderer: WeaponRenderer = weapon_module.weapon.get_module(ModuleType.Renderer)
@@ -47,6 +52,10 @@ class PlayerRenderer(Module):
             'run': PlayerAnimation
         }
         return {key: cls(self._context, animations[key]) for key, cls in animation_classes.items()}
+
+    def change_animation(self, animation: str):
+        self._current_animation = self._animations.get(animation)
+        self._current_animation.reset()
 
     def update(self, dt):
         self._current_animation.update(dt, True)
@@ -59,7 +68,7 @@ class PlayerRenderer(Module):
         # clear
         surface.fill((0, 0, 0, 0))
         # shadow
-        pygame.draw.ellipse(surface, (20, 20, 20), self._shadow)
+        surface.blit(self._shadow_image, self._shadow_rect)
         # player
         image = self._current_animation.img()
         surface.blit(image, self._current_animation.rect)

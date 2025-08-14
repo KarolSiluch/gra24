@@ -10,6 +10,7 @@ from game.tiles.modules.Position2DModule import Position2D, RectType
 from game.player.modules.renderer import PlayerRenderer
 from game.player.modules.weapon_module import WeaponModule
 from game.player.weapon.weapon import Weapon
+from game.player.modules.state_machine.state_machine import PlayerStateMachine
 
 
 class Player(BaseTile):
@@ -30,7 +31,9 @@ class Player(BaseTile):
         animation = AssetsManager.get('player')
         self.new_module(ModuleType.Renderer, PlayerRenderer, animation)
 
+        self.new_module(ModuleType.StateMachine, PlayerStateMachine)
+
     def update(self, dt: float, events: GameHandler):
-        self.get_module(ModuleType.Movement).update(dt, events)
+        self.get_module(ModuleType.StateMachine).update(dt, events)
         self.get_module(ModuleType.Renderer).update(dt)
         self.get_module(ModuleType.AABB).update()

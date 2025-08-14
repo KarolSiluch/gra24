@@ -29,7 +29,7 @@ class WeaponRenderer(Module):
 
     def get_pos(self, pos: tuple[int, int]):
         vector = self.mouse_vector()
-        vector.scale_to_length(3)
+        vector.scale_to_length(4)
         vector += pos
         return vector
 

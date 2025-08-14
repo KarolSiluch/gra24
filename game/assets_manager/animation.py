@@ -6,14 +6,17 @@ class Animation:
         self.images = images
         self.loop = loop
         self.animation_speed = animation_speed
+        self.reset()
+
+    def reset(self):
         self.done = False
         self.frame = 0
 
-    def copy(self):
-        return Animation(self.images, self.animation_speed, self.loop)
-
     def length(self):
         return len(self.images)
+
+    def set_frame(self, frame: float):
+        self.frame = frame
 
     # True: +, False: -
     def update(self, dt, direction: int):

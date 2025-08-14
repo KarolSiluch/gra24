@@ -9,7 +9,8 @@ class ModuleType(Enum):
     AABB = 2,
     Movement = 3,
     Collision = 4,
-    Weapon = 5
+    Weapon = 5,
+    StateMachine = 6
 
 
 class Context(Protocol):
