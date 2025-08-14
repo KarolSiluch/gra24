@@ -1,4 +1,4 @@
-from events_handlers.handler import GameHandler
+from events_handlers.handler import EventsHandler
 import pygame
 from game.player.player import Player
 import game.camera.game_camera as camera
@@ -9,24 +9,13 @@ from game.tiles.modules.Position2DModule import RectType
 from game.map.map import GameMap, GroupType
 from game.assets_manager.assets_manager import AssetsManager
 from game.tiles.modules.basic_modules import ModuleType
+from events_handlers.input_state import InputState
 
 
 class Gameplay:
-    _events_handler: GameHandler = None
-
-    @classmethod
-    def set_handler(cls, handler) -> None:
-        cls._events_handler = handler
-
-    def update_handler(self) -> list[pygame.Event]:
-        return self._events_handler.update()
-
-    @classmethod
-    def events_handler(cls) -> GameHandler:
-        return cls._events_handler
-
-    def __init__(self, handler: GameHandler):
-        self.set_handler(handler)
+    def __init__(self, handler: EventsHandler):
+        self._events_handler = handler
+        InputState.init(handler.keys())
         AssetsManager.init()
 
         self._map = {
@@ -45,6 +34,10 @@ class Gameplay:
             Tile([GroupType.Visible, GroupType.Obsticles], tile_image, topleft=pos)
 
     @property
+    def events_handler(self):
+        return self._events_handler
+
+    @property
     def renderer(self):
         return self._renderer
 
@@ -53,8 +46,7 @@ class Gameplay:
         return self._camera
 
     def update(self, dt: float):
-        self._player.update(dt, self._events_handler)
-        self._events_handler.reset_keys()
+        self._player.update(dt)
 
 
 class GameplayRenderer:

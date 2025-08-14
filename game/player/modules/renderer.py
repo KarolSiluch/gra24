@@ -37,11 +37,11 @@ class PlayerRenderer(Module):
         self._surface = pygame.Surface(self._rect.size, flags=pygame.SRCALPHA)
 
         self._shadow_image = pygame.Surface((15, 7), flags=pygame.SRCALPHA)
-        pygame.draw.ellipse(self._shadow_image, (20, 20, 20), pygame.Rect((0, 0), self._shadow_image.size))
+        pygame.draw.ellipse(self._shadow_image, (20, 20, 20, 150), pygame.Rect((0, 0), self._shadow_image.size))
         self._shadow_rect = self._shadow_image.get_rect(center=(self._rect.width // 2, self._rect.height - 6))
 
         self._animations = self._create_animations(animations)
-        self._current_animation = self._animations['run']
+        self._current_animation = self._animations['idle']
 
         weapon_module: WeaponModule = self._context.get_module(ModuleType.Weapon)
         self._weapon_renderer: WeaponRenderer = weapon_module.weapon.get_module(ModuleType.Renderer)

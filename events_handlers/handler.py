@@ -1,21 +1,15 @@
 from abc import ABC, abstractmethod
 import pygame
+from events_handlers.input_state import InputState
 
 
 class EventsHandler(ABC):
-    __slots__ = ('_events')
+    def __init__(self):
+        self._input_state = InputState
 
-    def __init__(self, *events: list[str]):
-        super().__init__()
-        self._events: dict[str, bool] = {key: False for key in events}
-
-    def get(cls, event: str) -> bool:
-        return cls._events.get(event, False)
+    @staticmethod
+    def keys():
+        return {'up', 'down', 'left', 'right'}
 
     @abstractmethod
-    def update(self) -> list[pygame.Event]: ...
-
-
-class GameHandler(EventsHandler):
-    def __init__(self):
-        super().__init__('up', 'down', 'left', 'right', 'mouse1')
+    def set_events(self, event: pygame.Event) -> None: ...

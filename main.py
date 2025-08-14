@@ -1,5 +1,6 @@
 import pygame
-from events_handlers.keyboard_handler import GameKeyboard
+from events_handlers.keyboard_handler import Keyboardhandler
+from events_handlers.input_state import InputState
 from game.gameplay import Gameplay
 import time
 
@@ -19,7 +20,9 @@ class Game:
         self._display: pygame. Surface = pygame.display.set_mode((screen_size[0] // 3, screen_size[1] // 3), flags)
 
         self._running = True
-        self._gameplay = Gameplay(GameKeyboard())
+
+        self._gameplay = Gameplay(Keyboardhandler())
+
         self._clock = pygame.time.Clock()
         self._previous_time = time.time()
 
@@ -33,9 +36,14 @@ class Game:
             self._clock.tick(500)
             dt = time.time() - self._previous_time
             self._previous_time = time.time()
-            for event in self._gameplay.update_handler():
+            events = pygame.event.get()
+
+            InputState.update()
+            for event in events:
                 if event.type == pygame.QUIT:
                     self._running = False
+
+                self._gameplay.events_handler.set_events(event)
 
             self._gameplay.update(dt)
             self.render()

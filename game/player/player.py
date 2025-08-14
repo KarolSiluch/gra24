@@ -2,7 +2,6 @@ import pygame
 from game.tiles.tile import BaseTile
 from game.player.modules.collision import CollisionModule
 from game.player.modules.movement import MoveModule
-from events_handlers.handler import GameHandler
 from game.tiles.modules.basic_modules import ModuleType
 from game.assets_manager.assets_manager import AssetsManager
 from game.AABBtree.AABBModule import AABBModule
@@ -33,7 +32,7 @@ class Player(BaseTile):
 
         self.new_module(ModuleType.StateMachine, PlayerStateMachine)
 
-    def update(self, dt: float, events: GameHandler):
-        self.get_module(ModuleType.StateMachine).update(dt, events)
+    def update(self, dt: float):
+        self.get_module(ModuleType.StateMachine).update(dt)
         self.get_module(ModuleType.Renderer).update(dt)
         self.get_module(ModuleType.AABB).update()
