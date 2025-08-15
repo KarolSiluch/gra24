@@ -5,6 +5,7 @@ from typing import Callable
 # from events_handlers.handler import GameHandler
 from game.map.map import GroupType
 from game.player.modules.collision import CollisionModule
+from events_handlers.input_state import InputState
 
 
 class MoveModule(Module):
@@ -34,7 +35,12 @@ class MoveModule(Module):
     def move(self, dt: float, direction: pygame.Vector2):
         rtype: RectType = RectType.Hitbox
 
-        self._direction = direction
+        x = InputState.pressed('right') - InputState.pressed('left')
+        y = InputState.pressed('down') - InputState.pressed('up')
+        new_direction = pygame.Vector2(x, y)
+        new_direction and new_direction.normalize_ip()
+
+        self._direction = new_direction
 
         set_pos_edge: Callable[[pygame.FRect], None] = lambda rect: self._position.set_right(rtype, rect.left)
         set_neg_edge: Callable[[pygame.FRect], None] = lambda rect: self._position.set_left(rtype, rect.right)

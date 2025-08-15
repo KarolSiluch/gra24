@@ -1,8 +1,8 @@
 from game.tiles.modules.basic_modules import Context, ModuleType
 from game.player.modules.movement import MoveModule
 from game.player.modules.renderer import PlayerRenderer
-from events_handlers.input_state import InputState
-import pygame
+# from events_handlers.input_state import InputState
+# import pygame
 from game.player.modules.state_machine.states.state import State
 
 
@@ -15,9 +15,9 @@ class PlayerIdle(State):
         renderer: PlayerRenderer = self._context.get_module(ModuleType.Renderer)
         renderer.change_animation('idle')
 
+    def update(self, dt: float):
+        self._movement.move(dt, self._movement.direction)
+
     def change_state(self) -> None | str:
-        events = InputState
-        x = events.pressed('right') - events.pressed('left')
-        y = events.pressed('down') - events.pressed('up')
-        if pygame.Vector2(x, y).magnitude():
+        if self._movement.direction.magnitude():
             return 'run'
