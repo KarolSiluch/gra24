@@ -37,6 +37,7 @@ class Player(BaseTile):
 
     def update(self, dt: float):
         self.get_module(ModuleType.Controls).update()
+        self.get_module(ModuleType.Weapon).update()
         self.get_module(ModuleType.StateMachine).update(dt)
         self.get_module(ModuleType.Renderer).update(dt)
         self.get_module(ModuleType.AABB).update()

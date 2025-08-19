@@ -10,7 +10,10 @@ class AssetsManager:
                 'run': Animation(cls.import_cut_graphics((4, 1), 'assets/run.png'), animation_speed=9),
                 'idle': Animation(cls.import_cut_graphics((5, 1), 'assets/idle.png'), animation_speed=7)
             },
-            'weapon': cls.load_image('assets/ak.png'),
+            'weapon': {
+                'ak': cls.load_image('assets/ak.png'),
+                'bullet': cls.load_image('assets/bullet.png')
+                },
             'tiles': cls.import_cut_graphics((3, 4), 'assets/walls.png')
         }
 

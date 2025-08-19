@@ -11,11 +11,14 @@ class ModuleType(Enum):
     Collision = 4,
     Weapon = 5,
     StateMachine = 6,
-    Controls = 7
+    Controls = 7,
+    Shooting = 8
 
 
 class Context(Protocol):
     def get_module(self, module_type: ModuleType): ...
+
+    def update(self): ...
 
 
 class Module(ABC):
