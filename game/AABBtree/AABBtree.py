@@ -112,7 +112,7 @@ class AABBTreeHead:
 
 class AABBLeaf(AABBNode):
     def __init__(self, head: AABBTreeHead, tile: AABBModule):
-        self._tile: Context = tile
+        self._tile = tile
         rect = tile.get_hitbox(head.rect_type)
         super().__init__(head, True, 0, rect)
 

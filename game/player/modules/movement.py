@@ -10,37 +10,40 @@ from game.player.modules.collision import CollisionModule
 class MoveModule(Module):
     __slots__ = ('_position', '_collisions', '_velocity', '_direction')
 
-    def start(self):
+    def start(self, velocity: int):
         self._position: Position2D = self._context.get_module(ModuleType.Position)
         self._collisions: CollisionModule = self._context.get_module(ModuleType.Collision)
-        self._velocity = 200
+        self._velocity = velocity
         self._direction = pygame.Vector2(0, 0)
+
+        self.edge_handler: dict[str, dict[int, Callable[[Position2D, pygame.FRect], None]]] = {
+            'x': {
+                +1: lambda pos, rect: pos.set_right(RectType.Hitbox, rect.left),
+                -1: lambda pos, rect: pos.set_left(RectType.Hitbox, rect.right),
+            },
+            'y': {
+                +1: lambda pos, rect: pos.set_bottom(RectType.Hitbox, rect.top),
+                -1: lambda pos, rect: pos.set_top(RectType.Hitbox, rect.bottom),
+            }
+        }
 
     @property
     def direction(self):
         return self._direction
 
-    def move_axis(self, dt: float, direction: float, axis: str, set_pos_edge, set_neg_edge) -> None:
+    def move_axis(self, dt: float, direction: float, axis: str) -> None:
         new_pos = getattr(self._position, axis) + direction * self._velocity * dt
         setattr(self._position, axis, new_pos)
+
+        handler = self.edge_handler[axis][1 if direction > 0 else -1]
         for tile in self._collisions.get_collision(GroupType.Obsticles):
             position: Position2D = tile.get_module(ModuleType.Position)
             rect = position.get_rect(RectType.Hitbox)
-            if direction > 0:
-                set_pos_edge(rect)
-            else:
-                set_neg_edge(rect)
+            handler(self._position, rect)
 
     def set_direction(self, new_direction: pygame.Vector2):
         self._direction = new_direction
 
     def move(self, dt: float, direction: pygame.Vector2):
-        rtype = RectType.Hitbox
-
-        set_pos_edge: Callable[[pygame.FRect], None] = lambda rect: self._position.set_right(rtype, rect.left)
-        set_neg_edge: Callable[[pygame.FRect], None] = lambda rect: self._position.set_left(rtype, rect.right)
-        self.move_axis(dt, direction.x, 'x', set_pos_edge, set_neg_edge)
-
-        set_pos_edge: Callable[[pygame.FRect], None] = lambda rect: self._position.set_bottom(rtype, rect.top)
-        set_neg_edge: Callable[[pygame.FRect], None] = lambda rect: self._position.set_top(rtype, rect.bottom)
-        self.move_axis(dt, direction.y, 'y', set_pos_edge, set_neg_edge)
+        self.move_axis(dt, direction.x, 'x')
+        self.move_axis(dt, direction.y, 'y')

@@ -10,6 +10,10 @@ class WeaponPosition(Module):
         self._offset_vector = self.cursor_vector(self._offset_size)
 
     @property
+    def pos(self):
+        return self._owner_position._pos
+
+    @property
     def offset_vector(self):
         return self._offset_vector
 

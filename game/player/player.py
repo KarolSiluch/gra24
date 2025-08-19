@@ -24,7 +24,7 @@ class Player(BaseTile):
 
         self.new_module(ModuleType.Collision, CollisionModule)
 
-        self.new_module(ModuleType.Movement, MoveModule)
+        self.new_module(ModuleType.Movement, MoveModule, 200)
 
         self.new_module(ModuleType.Weapon, WeaponModule, Weapon(self))
 

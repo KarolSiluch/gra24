@@ -12,14 +12,8 @@ class Position2D(Module):
     def start(self, pos: pygame.Vector2):
         self._pos = pos
         self._rects: dict[RectType, pygame.FRect] = {}
-        self._offset = {
-            'topleft': lambda size: self._pos,
-            'center': lambda size: self._pos - (size[0] / 2, size[1] / 2)
-        }
 
     def new_rect(self, rect_type: RectType, size, offset: str, custom_offset=(0, 0)):
-        # direct_pos = self._offset.get(offset)(size) + custom_offset
-        # self._rects[rect_type] = pygame.FRect(direct_pos, size)
         rect = pygame.Surface(size).get_frect(**{offset: self._pos})
         rect.move_ip(custom_offset)
         self._rects[rect_type] = rect

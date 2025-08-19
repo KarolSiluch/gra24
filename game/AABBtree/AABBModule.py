@@ -21,6 +21,10 @@ class AABBModule(Module):
         for node in self._g:
             node.reinsert()
 
+    def kill(self):
+        for node in self._g:
+            node.remove()
+
     @property
     def context(self):
         return self._context
