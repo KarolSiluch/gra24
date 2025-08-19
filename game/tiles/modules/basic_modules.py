@@ -10,7 +10,8 @@ class ModuleType(Enum):
     Movement = 3,
     Collision = 4,
     Weapon = 5,
-    StateMachine = 6
+    StateMachine = 6,
+    Controls = 7
 
 
 class Context(Protocol):

@@ -132,8 +132,7 @@ class AABBLeaf(AABBNode):
         cost = sum_area + self.parent.delta_sum
         Insertion.update_cost(cost, self)
 
-    def AABBcollision(self, rect: pygame.FRect, result: list, id) -> None:
-        print(id)
+    def AABBcollision(self, rect: pygame.FRect, result: list) -> None:
         if self.rect.colliderect(rect):
             result.append(self._tile.context)
 
@@ -241,12 +240,12 @@ class AABBContainer(AABBNode):
         if self._node2.layer > self._node1.layer:
             self._node1, self._node2 = self._node2, self._node1
 
-    def AABBcollision(self, rect: pygame.FRect, result: list, id) -> None:
+    def AABBcollision(self, rect: pygame.FRect, result: list) -> None:
         if rect.contains(self.rect):
             self.return_all(result)
         elif self.rect.colliderect(rect):
-            self._node1.AABBcollision(rect, result, id + 1)
-            self._node2.AABBcollision(rect, result, id + 1)
+            self._node1.AABBcollision(rect, result)
+            self._node2.AABBcollision(rect, result)
 
     def return_all(self, result: list):
         self._node1.return_all(result)
@@ -313,7 +312,7 @@ class AABBTree:
     def RectCollision(self, rect: pygame.FRect) -> list[Context]:
         result = []
         if node := self._head.node:
-            node.AABBcollision(rect, result, 0)
+            node.AABBcollision(rect, result)
         return result
 
     def AABBCollision(self, tile: AABBModule) -> list[Context]:
