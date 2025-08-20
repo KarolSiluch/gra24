@@ -4,6 +4,7 @@ from game.assets_manager.animation import Animation
 from game.tiles.modules.Position2DModule import Position2D, RectType
 from game.player.weapon.weapon import WeaponRenderer
 from game.player.modules.weapon_module import WeaponModule
+from game.game_cursor.game_cursor import Cursor
 
 
 class PlayerAnimation:
@@ -26,7 +27,7 @@ class PlayerAnimation:
 
     def img(self):
         image = self._animation.img()
-        flip = pygame.mouse.get_pos()[0] < self._position.x
+        flip = Cursor.get_pos().x < self._position.x
         return pygame.transform.flip(image, flip, False)
 
 

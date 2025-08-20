@@ -1,6 +1,7 @@
 import pygame
 from game.tiles.modules.basic_modules import Module, Context, ModuleType
 from game.tiles.modules.Position2DModule import Position2D
+from game.game_cursor.game_cursor import Cursor
 
 
 class WeaponPosition(Module):
@@ -21,7 +22,7 @@ class WeaponPosition(Module):
         self._offset_vector = self.cursor_vector(self._offset_size)
 
     def cursor_vector(self, size: int):
-        mx, my = pygame.mouse.get_pos()
+        mx, my = Cursor.get_pos()
         vector = pygame.Vector2(mx - self._owner_position.x, my - self._owner_position.y)
         vector and vector.scale_to_length(size)
         return vector

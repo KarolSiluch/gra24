@@ -10,6 +10,7 @@ from game.map.map import GameMap, GroupType
 from game.assets_manager.assets_manager import AssetsManager
 from game.tiles.modules.basic_modules import ModuleType
 from events_handlers.input_state import InputState
+from game.game_cursor.game_cursor import Cursor
 
 
 class Gameplay:
@@ -47,6 +48,8 @@ class Gameplay:
         return self._camera
 
     def update(self, dt: float):
+        Cursor.update(self._camera.offset)
+        self._camera.update(dt, self)
         self._player.update(dt)
         self._map[GroupType.Bullets].update(dt, self._camera.rect)
 
@@ -59,7 +62,9 @@ class GameplayRenderer:
         surface.fill('#394541')
         visible_tiles = GameMap.get_group(GroupType.Visible)
         tiles: tuple[Tile] = self._game.camera.get_tiles(visible_tiles)
-        visible_tiles.print(surface)
+        # visible_tiles.print(surface)
+
+        camera_offset = self._game.camera.offset
         for tile in sorted(tiles, key=lambda tile: tile.get_module(ModuleType.Position).y):
-            pos = tile.renderer.pos
-            tile.renderer.render(surface, pos)
+            rect: pygame.FRect = tile.get_module(ModuleType.Position).get_rect(RectType.RenderRect)
+            tile.renderer.render(surface, -camera_offset + rect.topleft)
