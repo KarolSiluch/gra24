@@ -2,15 +2,18 @@ import pygame
 from game.tiles.modules.basic_modules import Module, ModuleType, Context
 from game.assets_manager.animation import Animation
 from game.tiles.modules.Position2DModule import Position2D, RectType
+from game.player.modules.movement import MoveModule
 from game.player.weapon.weapon import WeaponRenderer
 from game.player.modules.weapon_module import WeaponModule
 from game.game_cursor.game_cursor import Cursor
+from math import copysign
 
 
 class PlayerAnimation:
     def __init__(self, context: Context, animation: Animation):
         self._animation = animation
         self._position: Position2D = context.get_module(ModuleType.Position)
+        self._movement: MoveModule = context.get_module(ModuleType.Movement)
 
         x, y = self._position.get_rect(RectType.RenderRect).size
         self._rect = self._animation.img().get_rect(center=(x // 2, y // 2))
@@ -22,7 +25,8 @@ class PlayerAnimation:
     def reset(self):
         self._animation.reset()
 
-    def update(self, dt, direction):
+    def update(self, dt):
+        direction = copysign(1, self._movement.direction.x) * (1 - (Cursor.get_pos().x < self._position.x) * 2)
         self._animation.update(dt, direction)
 
     def img(self):
@@ -59,7 +63,7 @@ class PlayerRenderer(Module):
         self._current_animation.reset()
 
     def update(self, dt):
-        self._current_animation.update(dt, True)
+        self._current_animation.update(dt)
 
     @property
     def pos(self) -> tuple[float, float]:
