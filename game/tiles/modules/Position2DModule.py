@@ -19,6 +19,10 @@ class Position2D(Module):
         self._rects[rect_type] = rect
 
     @property
+    def pos(self):
+        return self._pos.copy()
+
+    @property
     def x(self):
         return self._pos.x
 

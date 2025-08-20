@@ -5,6 +5,7 @@ from game.AABBtree.AABBtree import AABBTree
 class GroupType(Enum):
     Visible = 1
     Obsticles = 2
+    Bullets = 3
 
 
 class GameMap:

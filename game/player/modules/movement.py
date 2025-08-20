@@ -45,5 +45,7 @@ class MoveModule(Module):
         self._direction = new_direction
 
     def move(self, dt: float, direction: pygame.Vector2):
+        # print(self._position.get_rect(RectType.RenderRect).center)
+        # print(self._position)
         self.move_axis(dt, direction.x, 'x')
         self.move_axis(dt, direction.y, 'y')

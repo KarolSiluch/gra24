@@ -318,5 +318,9 @@ class AABBTree:
     def AABBCollision(self, tile: AABBModule) -> list[Context]:
         return self.RectCollision(tile.get_hitbox(self._rect_type))
 
+    def update(self, dt: int, rect: pygame.FRect, *args):
+        for tile in self.RectCollision(rect):
+            tile.update(dt, *args)
+
     def print(self, display: pygame.Surface):
         self._head.print(display)

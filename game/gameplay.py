@@ -20,7 +20,8 @@ class Gameplay:
 
         self._map = {
             GroupType.Visible: AABBTree(RectType.RenderRect),
-            GroupType.Obsticles: AABBTree(RectType.Hitbox)
+            GroupType.Obsticles: AABBTree(RectType.Hitbox),
+            GroupType.Bullets: AABBTree(RectType.RenderRect)
         }
         GameMap.init(self._map)
 
@@ -47,6 +48,7 @@ class Gameplay:
 
     def update(self, dt: float):
         self._player.update(dt)
+        self._map[GroupType.Bullets].update(dt, self._camera.rect)
 
 
 class GameplayRenderer:

@@ -11,11 +11,11 @@ class WeaponPosition(Module):
 
     @property
     def pos(self):
-        return self._owner_position._pos
+        return self._owner_position.pos
 
     @property
     def offset_vector(self):
-        return self._offset_vector
+        return self._offset_vector.copy()
 
     def update(self):
         self._offset_vector = self.cursor_vector(self._offset_size)

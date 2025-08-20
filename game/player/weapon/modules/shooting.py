@@ -9,4 +9,4 @@ class ShootingModule(Module):
         self._position: WeaponPosition = self._context.get_module(ModuleType.Position)
 
     def shoot(self):
-        Bullet(self._position.pos, self._position.offset_vector)
+        Bullet(self._position.pos, self._position.offset_vector.normalize())
