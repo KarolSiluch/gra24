@@ -9,7 +9,7 @@ class EventsHandler(ABC):
 
     @staticmethod
     def keys():
-        return {'up', 'down', 'left', 'right', 'shoot'}
+        return {'up', 'down', 'left', 'right', 'shoot', 'dodge'}
 
     @abstractmethod
     def set_events(self, event: pygame.Event) -> None: ...

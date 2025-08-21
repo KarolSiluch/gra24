@@ -11,6 +11,7 @@ from game.player.modules.weapon_module import WeaponModule
 from game.player.weapon.weapon import Weapon
 from game.player.modules.controls import ControlsModule
 from game.player.modules.state_machine.state_machine import PlayerStateMachine
+from game.player.modules.dodge import DodgeModule
 
 
 class Player(BaseTile):
@@ -25,6 +26,8 @@ class Player(BaseTile):
         self.new_module(ModuleType.Collision, CollisionModule)
 
         self.new_module(ModuleType.Movement, MoveModule, 200)
+
+        self.new_module(ModuleType.Dodge, DodgeModule)
 
         self.new_module(ModuleType.Weapon, WeaponModule, Weapon(self))
 

@@ -31,6 +31,9 @@ class MoveModule(Module):
     def direction(self):
         return self._direction
 
+    def set_velocity(self, velocity: int):
+        self._velocity = velocity
+
     def move_axis(self, dt: float, direction: float, axis: str) -> None:
         new_pos = getattr(self._position, axis) + direction * self._velocity * dt
         setattr(self._position, axis, new_pos)
@@ -45,7 +48,5 @@ class MoveModule(Module):
         self._direction = new_direction
 
     def move(self, dt: float, direction: pygame.Vector2):
-        # print(self._position.get_rect(RectType.RenderRect).center)
-        # print(self._position)
         self.move_axis(dt, direction.x, 'x')
         self.move_axis(dt, direction.y, 'y')

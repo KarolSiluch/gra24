@@ -1,6 +1,7 @@
 from game.tiles.modules.basic_modules import Module
 from game.player.modules.state_machine.states.idle_state import PlayerIdle
 from game.player.modules.state_machine.states.run_state import PlayerRun
+from game.player.modules.state_machine.states.dodge_state import PlayerDodge
 from game.player.modules.state_machine.states.state import State
 
 
@@ -8,7 +9,8 @@ class PlayerStateMachine(Module):
     def start(self):
         self._states: dict[str, State] = {
             'idle': PlayerIdle(self._context, {'run'}),
-            'run': PlayerRun(self._context, {'idle'})
+            'run': PlayerRun(self._context, {'idle', 'dodge'}),
+            'dodge': PlayerDodge(self._context, {'idle', 'run'})
         }
         self._current_state = self._states['idle']
         self._current_state.enter()

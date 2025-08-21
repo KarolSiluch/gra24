@@ -4,15 +4,16 @@ from typing import Protocol
 
 
 class ModuleType(Enum):
-    Position = 0,
-    Renderer = 1,
-    AABB = 2,
-    Movement = 3,
-    Collision = 4,
-    Weapon = 5,
-    StateMachine = 6,
-    Controls = 7,
+    Position = 0
+    Renderer = 1
+    AABB = 2
+    Movement = 3
+    Collision = 4
+    Weapon = 5
+    StateMachine = 6
+    Controls = 7
     Shooting = 8
+    Dodge = 9
 
 
 class Context(Protocol):

@@ -13,6 +13,8 @@ class Keyboardhandler(EventHandlers.EventsHandler):
                 self._input_state.set_action('left', event.type == pygame.KEYDOWN)
             elif event.key == pygame.K_d:
                 self._input_state.set_action('right', event.type == pygame.KEYDOWN)
+            elif event.key == pygame.K_LSHIFT:
+                self._input_state.set_action('dodge', event.type == pygame.KEYDOWN)
 
         elif event.type in {pygame.MOUSEBUTTONDOWN, pygame.MOUSEBUTTONUP}:
             if event.button == 1:

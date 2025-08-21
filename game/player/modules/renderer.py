@@ -3,10 +3,46 @@ from game.tiles.modules.basic_modules import Module, ModuleType, Context
 from game.assets_manager.animation import Animation
 from game.tiles.modules.Position2DModule import Position2D, RectType
 from game.player.modules.movement import MoveModule
+from game.player.modules.dodge import DodgeModule
 from game.player.weapon.weapon import WeaponRenderer
 from game.player.modules.weapon_module import WeaponModule
 from game.game_cursor.game_cursor import Cursor
 from math import copysign
+
+
+class PlayerDodgeAnimation:
+    def __init__(self, context: Context, animation: Animation):
+        self._animation = animation
+        self._dodge: DodgeModule = context.get_module(ModuleType.Dodge)
+
+        self._position: Position2D = context.get_module(ModuleType.Position)
+        x, y = self._position.get_rect(RectType.RenderRect).size
+        self._x, self._y = x // 2, y // 2
+
+        weapon_module: WeaponModule = context.get_module(ModuleType.Weapon)
+        self._weapon_renderer: WeaponRenderer = weapon_module.weapon.get_module(ModuleType.Renderer)
+
+        self.y_offsey = lambda x: 0.0002 * x * (x - 360)
+
+    def reset(self):
+        self._flip = Cursor.get_pos().x < self._position.x
+
+        self._directionx = -copysign(1, self._dodge._moving_direction.x)
+        self._animation.reset()
+
+    def update(self, dt: float):
+        self._animation.set_frame(self._animation.length() * self._dodge.progression())
+
+    def blit_ip(self, surface: pygame.Surface):
+        y_offset = self.y_offsey(self._dodge._angle)
+
+        image = self._animation.img()
+        image = pygame.transform.flip(image, self._flip, False)
+        image = pygame.transform.rotate(image, self._dodge._angle * self._directionx)
+        surface.blit(image, image.get_rect(center=(self._x, self._y + y_offset)))
+
+        rotation_point = (surface.width // 2, surface.height // 2 + 4 + y_offset)
+        self._weapon_renderer.render(surface, rotation_point, 1 - self._dodge.progression())
 
 
 class PlayerAnimation:
@@ -18,6 +54,9 @@ class PlayerAnimation:
         x, y = self._position.get_rect(RectType.RenderRect).size
         self._rect = self._animation.img().get_rect(center=(x // 2, y // 2))
 
+        weapon_module: WeaponModule = context.get_module(ModuleType.Weapon)
+        self._weapon_renderer: WeaponRenderer = weapon_module.weapon.get_module(ModuleType.Renderer)
+
     @property
     def rect(self):
         return self._rect
@@ -26,13 +65,21 @@ class PlayerAnimation:
         self._animation.reset()
 
     def update(self, dt):
-        direction = copysign(1, self._movement.direction.x) * (1 - (Cursor.get_pos().x < self._position.x) * 2)
+        direction = 1
+        if self._movement.direction.x:
+            direction_x = copysign(1, self._movement.direction.x)
+            cursor_x = copysign(1, Cursor.get_pos().x - self._position.x)
+            direction = direction_x * cursor_x
         self._animation.update(dt, direction)
 
-    def img(self):
+    def blit_ip(self, surface: pygame.Surface):
         image = self._animation.img()
         flip = Cursor.get_pos().x < self._position.x
-        return pygame.transform.flip(image, flip, False)
+        image = pygame.transform.flip(image, flip, False)
+        surface.blit(image, self._rect)
+
+        rotation_point = (self._rect.centerx, self._rect.centery + 4)
+        self._weapon_renderer.render(surface, rotation_point, 1)
 
 
 class PlayerRenderer(Module):
@@ -48,13 +95,11 @@ class PlayerRenderer(Module):
         self._animations = self._create_animations(animations)
         self._current_animation = self._animations['idle']
 
-        weapon_module: WeaponModule = self._context.get_module(ModuleType.Weapon)
-        self._weapon_renderer: WeaponRenderer = weapon_module.weapon.get_module(ModuleType.Renderer)
-
     def _create_animations(self, animations):
         animation_classes = {
             'idle': PlayerAnimation,
-            'run': PlayerAnimation
+            'run': PlayerAnimation,
+            'dodge': PlayerDodgeAnimation
         }
         return {key: cls(self._context, animations[key]) for key, cls in animation_classes.items()}
 
@@ -75,11 +120,7 @@ class PlayerRenderer(Module):
         # shadow
         surface.blit(self._shadow_image, self._shadow_rect)
         # player
-        image = self._current_animation.img()
-        surface.blit(image, self._current_animation.rect)
-        # weapon
-        rotation_point = (self._surface.width // 2, self._surface.height // 2 + 4)
-        self._weapon_renderer.render(surface, rotation_point)
+        self._current_animation.blit_ip(surface)
 
         return surface
 
