@@ -1,10 +1,10 @@
 from game.tiles.tile import BaseTile
-from game.tiles.modules.basic_modules import ModuleType, Module
-from game.assets_manager.assets_manager import AssetsManager
-from game.tiles.modules.Position2DModule import Position2D, RectType
-from game.AABBtree.AABBModule import AABBModule
+from engine.base_tile.modules.basic_modules import ModuleType, Module
+from engine.assets_manager.assets_manager import AssetsManager
+from engine.base_tile.modules.Position2DModule import Position2D, RectType
+from engine.base_tile.modules.AABBModule import AABBModule
 from game.player.modules.collision import CollisionModule
-from game.map.map import GroupType
+from engine.map.map import GroupType
 import pygame
 
 

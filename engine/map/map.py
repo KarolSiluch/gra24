@@ -1,5 +1,5 @@
 from enum import Enum
-from game.AABBtree.AABBtree import AABBTree
+from engine.AABBtree.AABBtree import AABBTree
 
 
 class GroupType(Enum):

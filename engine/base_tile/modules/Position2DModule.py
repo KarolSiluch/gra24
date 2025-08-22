@@ -1,6 +1,6 @@
 import pygame
 from enum import Enum
-from game.tiles.modules.basic_modules import Module
+from engine.base_tile.modules.basic_modules import Module
 
 
 class RectType(Enum):

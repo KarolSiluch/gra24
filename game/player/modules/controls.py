@@ -1,7 +1,7 @@
-from game.tiles.modules.basic_modules import Module, ModuleType
+from engine.base_tile.modules.basic_modules import Module, ModuleType
 from game.player.modules.movement import MoveModule
 from game.player.modules.weapon_module import WeaponModule
-from events_handlers.input_state import InputState
+from engine.events_handlers.input_state import InputState
 from game.player.modules.dodge import DodgeModule
 import pygame
 

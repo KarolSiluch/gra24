@@ -1,9 +1,9 @@
 import pygame
-from game.tiles.modules.basic_modules import Module, ModuleType
-from game.tiles.modules.Position2DModule import Position2D, RectType
+from engine.base_tile.modules.basic_modules import Module, ModuleType
+from engine.base_tile.modules.Position2DModule import Position2D, RectType
 from typing import Callable
 # from events_handlers.handler import GameHandler
-from game.map.map import GroupType
+from engine.map.map import GroupType
 from game.player.modules.collision import CollisionModule
 
 

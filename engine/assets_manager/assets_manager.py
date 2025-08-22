@@ -1,5 +1,5 @@
 import pygame
-from game.assets_manager.animation import Animation
+from engine.assets_manager.animation import Animation
 
 
 class AssetsManager:

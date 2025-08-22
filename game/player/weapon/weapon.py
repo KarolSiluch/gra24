@@ -1,6 +1,6 @@
 from game.tiles.tile import BaseTile
-from game.tiles.modules.basic_modules import Context, ModuleType
-from game.assets_manager.assets_manager import AssetsManager
+from engine.base_tile.modules.basic_modules import Context, ModuleType
+from engine.assets_manager.assets_manager import AssetsManager
 from game.player.weapon.modules.renderer import WeaponRenderer
 from game.player.weapon.modules.position import WeaponPosition
 from game.player.weapon.modules.shooting import ShootingModule

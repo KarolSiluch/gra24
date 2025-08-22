@@ -1,6 +1,6 @@
 import pygame
-from events_handlers.keyboard_handler import Keyboardhandler
-from events_handlers.input_state import InputState
+from engine.events_handlers.keyboard_handler import Keyboardhandler
+from engine.events_handlers.input_state import InputState
 from game.gameplay import Gameplay
 import time
 

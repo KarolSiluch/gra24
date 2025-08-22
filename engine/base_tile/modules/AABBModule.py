@@ -1,8 +1,8 @@
 from typing import Protocol
-from game.AABBtree.AABBtree import AABBTree
-from game.tiles.modules.Position2DModule import RectType, Position2D
-from game.tiles.modules.basic_modules import Module, ModuleType
-from game.map.map import GameMap
+from engine.AABBtree.AABBtree import AABBTree
+from engine.base_tile.modules.Position2DModule import RectType, Position2D
+from engine.base_tile.modules.basic_modules import Module, ModuleType
+from engine.map.map import GameMap
 
 
 class Context(Protocol):

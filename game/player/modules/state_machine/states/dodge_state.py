@@ -1,4 +1,4 @@
-from game.tiles.modules.basic_modules import Context, ModuleType
+from engine.base_tile.modules.basic_modules import Context, ModuleType
 from game.player.modules.dodge import DodgeModule
 from game.player.modules.movement import MoveModule
 from game.player.modules.renderer import PlayerRenderer

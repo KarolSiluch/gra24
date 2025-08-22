@@ -2,10 +2,10 @@ import pygame
 from game.tiles.tile import BaseTile
 from game.player.modules.collision import CollisionModule
 from game.player.modules.movement import MoveModule
-from game.tiles.modules.basic_modules import ModuleType
-from game.assets_manager.assets_manager import AssetsManager
-from game.AABBtree.AABBModule import AABBModule
-from game.tiles.modules.Position2DModule import Position2D, RectType
+from engine.base_tile.modules.basic_modules import ModuleType
+from engine.assets_manager.assets_manager import AssetsManager
+from engine.base_tile.modules.AABBModule import AABBModule
+from engine.base_tile.modules.Position2DModule import Position2D, RectType
 from game.player.modules.renderer import PlayerRenderer
 from game.player.modules.weapon_module import WeaponModule
 from game.player.weapon.weapon import Weapon

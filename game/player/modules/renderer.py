@@ -1,37 +1,50 @@
 import pygame
-from game.tiles.modules.basic_modules import Module, ModuleType, Context
-from game.assets_manager.animation import Animation
-from game.tiles.modules.Position2DModule import Position2D, RectType
+from engine.base_tile.modules.basic_modules import Module, ModuleType, Context
+from engine.assets_manager.animation import Animation
+from engine.base_tile.modules.Position2DModule import Position2D, RectType
 from game.player.modules.movement import MoveModule
 from game.player.modules.dodge import DodgeModule
 from game.player.weapon.weapon import WeaponRenderer
 from game.player.modules.weapon_module import WeaponModule
-from game.game_cursor.game_cursor import Cursor
+from engine.game_cursor.game_cursor import Cursor
 from math import copysign
+from abc import ABC, abstractmethod
 
 
-class PlayerDodgeAnimation:
+class PlayerAnimation(ABC):
     def __init__(self, context: Context, animation: Animation):
         self._animation = animation
-        self._dodge: DodgeModule = context.get_module(ModuleType.Dodge)
-
         self._position: Position2D = context.get_module(ModuleType.Position)
-        x, y = self._position.get_rect(RectType.RenderRect).size
-        self._x, self._y = x // 2, y // 2
-
         weapon_module: WeaponModule = context.get_module(ModuleType.Weapon)
         self._weapon_renderer: WeaponRenderer = weapon_module.weapon.get_module(ModuleType.Renderer)
+
+    def reset(self):
+        self._animation.reset()
+
+    @abstractmethod
+    def update(self, dt: float): ...
+
+    @abstractmethod
+    def blit_ip(self, surface: pygame.Surface): ...
+
+
+class PlayerDodgeAnimation(PlayerAnimation):
+    def __init__(self, context: Context, animation: Animation):
+        super().__init__(context, animation)
+        self._dodge: DodgeModule = context.get_module(ModuleType.Dodge)
+
+        x, y = self._position.get_rect(RectType.RenderRect).size
+        self._x, self._y = x // 2, y // 2
 
         self.y_offsey = lambda x: 0.0002 * x * (x - 360)
 
     def reset(self):
+        super().reset()
         self._flip = Cursor.get_pos().x < self._position.x
-
         self._directionx = -copysign(1, self._dodge._moving_direction.x)
-        self._animation.reset()
 
     def update(self, dt: float):
-        self._animation.set_frame(self._animation.length() * self._dodge.progression())
+        self._animation.set_frame(self._animation.length() * self._dodge.progression() ** 2)
 
     def blit_ip(self, surface: pygame.Surface):
         y_offset = self.y_offsey(self._dodge._angle)
@@ -41,28 +54,17 @@ class PlayerDodgeAnimation:
         image = pygame.transform.rotate(image, self._dodge._angle * self._directionx)
         surface.blit(image, image.get_rect(center=(self._x, self._y + y_offset)))
 
-        rotation_point = (surface.width // 2, surface.height // 2 + 4 + y_offset)
+        rotation_point = (self._x, self._y + 4 + y_offset)
         self._weapon_renderer.render(surface, rotation_point, 1 - self._dodge.progression())
 
 
-class PlayerAnimation:
+class PlayerGeneralAnimation(PlayerAnimation):
     def __init__(self, context: Context, animation: Animation):
-        self._animation = animation
-        self._position: Position2D = context.get_module(ModuleType.Position)
+        super().__init__(context, animation)
         self._movement: MoveModule = context.get_module(ModuleType.Movement)
 
         x, y = self._position.get_rect(RectType.RenderRect).size
         self._rect = self._animation.img().get_rect(center=(x // 2, y // 2))
-
-        weapon_module: WeaponModule = context.get_module(ModuleType.Weapon)
-        self._weapon_renderer: WeaponRenderer = weapon_module.weapon.get_module(ModuleType.Renderer)
-
-    @property
-    def rect(self):
-        return self._rect
-
-    def reset(self):
-        self._animation.reset()
 
     def update(self, dt):
         direction = 1
@@ -95,10 +97,10 @@ class PlayerRenderer(Module):
         self._animations = self._create_animations(animations)
         self._current_animation = self._animations['idle']
 
-    def _create_animations(self, animations):
+    def _create_animations(self, animations) -> dict[str, PlayerAnimation]:
         animation_classes = {
-            'idle': PlayerAnimation,
-            'run': PlayerAnimation,
+            'idle': PlayerGeneralAnimation,
+            'run': PlayerGeneralAnimation,
             'dodge': PlayerDodgeAnimation
         }
         return {key: cls(self._context, animations[key]) for key, cls in animation_classes.items()}
@@ -115,11 +117,8 @@ class PlayerRenderer(Module):
         return self._rect.topleft
 
     def img(self, surface: pygame.Surface) -> pygame.Surface:
-        # clear
         surface.fill((0, 0, 0, 0))
-        # shadow
         surface.blit(self._shadow_image, self._shadow_rect)
-        # player
         self._current_animation.blit_ip(surface)
 
         return surface

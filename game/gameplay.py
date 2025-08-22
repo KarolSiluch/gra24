@@ -1,16 +1,16 @@
-from events_handlers.handler import EventsHandler
+from engine.events_handlers.handler import EventsHandler
 import pygame
 from game.player.player import Player
-import game.camera.game_camera as camera
+import engine.camera.game_camera as camera
 from game.tiles.tile import Tile
-from game.AABBtree.AABBtree import AABBTree
+from engine.AABBtree.AABBtree import AABBTree
 from random import randint
-from game.tiles.modules.Position2DModule import RectType
-from game.map.map import GameMap, GroupType
-from game.assets_manager.assets_manager import AssetsManager
-from game.tiles.modules.basic_modules import ModuleType
-from events_handlers.input_state import InputState
-from game.game_cursor.game_cursor import Cursor
+from engine.base_tile.modules.Position2DModule import RectType
+from engine.map.map import GameMap, GroupType
+from engine.assets_manager.assets_manager import AssetsManager
+from engine.base_tile.modules.basic_modules import ModuleType
+from engine.events_handlers.input_state import InputState
+from engine.game_cursor.game_cursor import Cursor
 
 
 class Gameplay:

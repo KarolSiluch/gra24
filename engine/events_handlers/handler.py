@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 import pygame
-from events_handlers.input_state import InputState
+from engine.events_handlers.input_state import InputState
 
 
 class EventsHandler(ABC):

@@ -1,9 +1,9 @@
 import pygame
-from game.AABBtree.AABBtree import AABBTree
-from game.tiles.modules.basic_modules import ModuleType
-from game.tiles.modules.Position2DModule import Position2D
-from game.tiles.modules.Position2DModule import RectType
-from game.game_cursor.game_cursor import Cursor
+from engine.AABBtree.AABBtree import AABBTree
+from engine.base_tile.modules.basic_modules import ModuleType
+from engine.base_tile.modules.Position2DModule import Position2D
+from engine.base_tile.modules.Position2DModule import RectType
+from engine.game_cursor.game_cursor import Cursor
 
 
 class Camera:

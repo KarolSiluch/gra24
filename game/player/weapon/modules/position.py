@@ -1,7 +1,7 @@
 import pygame
-from game.tiles.modules.basic_modules import Module, Context, ModuleType
-from game.tiles.modules.Position2DModule import Position2D
-from game.game_cursor.game_cursor import Cursor
+from engine.base_tile.modules.basic_modules import Module, Context, ModuleType
+from engine.base_tile.modules.Position2DModule import Position2D
+from engine.game_cursor.game_cursor import Cursor
 
 
 class WeaponPosition(Module):

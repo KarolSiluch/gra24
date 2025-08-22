@@ -1,6 +1,6 @@
 import pygame
-from game.tiles.modules.Position2DModule import Position2D, RectType
-from game.tiles.modules.basic_modules import Module, ModuleType
+from engine.base_tile.modules.Position2DModule import Position2D, RectType
+from engine.base_tile.modules.basic_modules import Module, ModuleType
 
 
 class RendererModule(Module):

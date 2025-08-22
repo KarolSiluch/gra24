@@ -1,7 +1,7 @@
-from game.map.map import GameMap, GroupType
-from game.AABBtree.AABBModule import AABBModule
+from engine.map.map import GameMap, GroupType
+from engine.base_tile.modules.AABBModule import AABBModule
 from game.tiles.tile import Tile
-from game.tiles.modules.basic_modules import Module, ModuleType
+from engine.base_tile.modules.basic_modules import Module, ModuleType
 
 
 class CollisionModule(Module):

@@ -1,8 +1,8 @@
 import pygame
 from abc import ABC, abstractmethod
-from game.tiles.modules.Position2DModule import RectType
+from engine.base_tile.modules.Position2DModule import RectType
 from typing import Protocol
-from game.tiles.modules.basic_modules import Context
+from engine.base_tile.modules.basic_modules import Context
 
 
 class AABBModule(Protocol):

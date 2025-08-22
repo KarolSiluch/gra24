@@ -1,4 +1,4 @@
-from game.tiles.modules.basic_modules import Module
+from engine.base_tile.modules.basic_modules import Module
 from game.player.modules.state_machine.states.idle_state import PlayerIdle
 from game.player.modules.state_machine.states.run_state import PlayerRun
 from game.player.modules.state_machine.states.dodge_state import PlayerDodge

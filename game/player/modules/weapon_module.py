@@ -1,4 +1,4 @@
-from game.tiles.modules.basic_modules import Module, ModuleType
+from engine.base_tile.modules.basic_modules import Module, ModuleType
 from game.player.weapon.weapon import Weapon
 from game.player.weapon.modules.shooting import ShootingModule
 

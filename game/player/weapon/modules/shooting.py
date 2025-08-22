@@ -1,5 +1,5 @@
 # import pygame
-from game.tiles.modules.basic_modules import Module, ModuleType
+from engine.base_tile.modules.basic_modules import Module, ModuleType
 from game.player.weapon.modules.position import WeaponPosition
 from game.player.weapon.bullet.bullet import Bullet
 
