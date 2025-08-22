@@ -1,5 +1,6 @@
 import pygame
-from engine.base_tile.modules.basic_modules import Module, ModuleType, Context
+from engine.base_tile.modules.basic_modules import ModuleType, Context
+from engine.base_tile.modules.renderer import BaseRenderer
 from engine.assets_manager.animation import Animation
 from engine.base_tile.modules.Position2DModule import Position2D, RectType
 from game.player.modules.movement import MoveModule
@@ -84,7 +85,7 @@ class PlayerGeneralAnimation(PlayerAnimation):
         self._weapon_renderer.render(surface, rotation_point, 1)
 
 
-class PlayerRenderer(Module):
+class PlayerRenderer(BaseRenderer):
     def start(self, animations: dict[str, Animation]):
         position: Position2D = self._context.get_module(ModuleType.Position)
         self._rect = position.get_rect(RectType.RenderRect)

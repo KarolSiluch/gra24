@@ -5,10 +5,6 @@ class BaseTile:
     def __init__(self):
         self._modules: dict[ModuleType, Module] = {}
 
-    @property
-    def renderer(self):
-        return self.get_module(ModuleType.Renderer)
-
     def update(self): ...
 
     def new_module(self, module_type, module, *atributes) -> Module:

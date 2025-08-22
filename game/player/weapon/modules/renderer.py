@@ -1,9 +1,10 @@
 import pygame
-from engine.base_tile.modules.basic_modules import Module, ModuleType
+from engine.base_tile.modules.basic_modules import ModuleType
 from game.player.weapon.modules.position import WeaponPosition
+from engine.base_tile.modules.renderer import BaseRenderer
 
 
-class WeaponRenderer(Module):
+class WeaponRenderer(BaseRenderer):
     def start(self, image: pygame.Surface):
         self._position: WeaponPosition = self._context.get_module(ModuleType.Position)
         self._image = image

@@ -11,6 +11,7 @@ from engine.assets_manager.assets_manager import AssetsManager
 from engine.base_tile.modules.basic_modules import ModuleType
 from engine.events_handlers.input_state import InputState
 from engine.game_cursor.game_cursor import Cursor
+from engine.base_tile.modules.renderer import BaseRenderer
 
 
 class Gameplay:
@@ -67,4 +68,5 @@ class GameplayRenderer:
         camera_offset = self._game.camera.offset
         for tile in sorted(tiles, key=lambda tile: tile.get_module(ModuleType.Position).y):
             rect: pygame.FRect = tile.get_module(ModuleType.Position).get_rect(RectType.RenderRect)
-            tile.renderer.render(surface, -camera_offset + rect.topleft)
+            renderer: BaseRenderer = tile.get_module(ModuleType.Renderer)
+            renderer.render(surface, -camera_offset + rect.topleft)
