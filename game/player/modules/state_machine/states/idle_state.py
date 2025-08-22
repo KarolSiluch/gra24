@@ -7,11 +7,12 @@ from game.player.modules.state_machine.states.state import State
 
 
 class PlayerIdle(State):
-    def __init__(self, context: Context, possible_next_states: set):
-        super().__init__(context, possible_next_states)
+    def __init__(self, context: Context, cooldown: int, possible_next_states: set):
+        super().__init__(context, cooldown, possible_next_states)
         self._movement: MoveModule = context.get_module(ModuleType.Movement)
 
     def enter(self):
+        super().enter()
         renderer: PlayerRenderer = self._context.get_module(ModuleType.Renderer)
         renderer.change_animation('idle')
 
